@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Http\Requests\AskQuestionRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\askQuestionRequest;
+
 class QuestionController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth',['except' =>['index','show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,9 +19,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('user')->latest()->paginate(5);
-        
-        return view('questions.index', compact('questions'));
+       $questions = Question::latest()->paginate(5);
+       return view('questions.index', compact('questions'));
     }
 
     /**
@@ -26,9 +30,8 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        
         $question = new Question();
-        return view('questions.create',  compact('question'));
+        return view('questions.create',compact('question'));
     }
 
     /**
@@ -37,11 +40,11 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(askQuestionRequest $request)
+    public function store(AskQuestionRequest $request)
     {
         $request->user()->questions()->create($request->only('title','body'));
-        return redirect()->route('questions.index')->
-                with('success','Your Question Has been Submitted');
+        return redirect()->route('questions.index')
+                ->with('success','Your Questions Has been Submitted');
     }
 
     /**
@@ -52,8 +55,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        $question->increment('views');
-        return view('questions.show',  compact('question'));
+        return view('questions.show',compact('question'));
     }
 
     /**
@@ -64,14 +66,9 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
-        /*if(\Gate::allows('update-question', $question)){
-            return view('questions.edit',  compact('question'));
-        }*/
-        if(\Gate::denies('update-question', $question)){
-            abort(403, 'Access Denied');
-           
-        }
-         return view('questions.edit',  compact('question'));
+        $this->authorize('update',$question);
+        
+        return view('questions.edit', compact('question'));
     }
 
     /**
@@ -81,15 +78,11 @@ class QuestionController extends Controller
      * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(askQuestionRequest $request, Question $question)
+    public function update(AskQuestionRequest $request, Question $question)
     {
-        if(\Gate::denies('update-question', $question)){
-            abort(403, 'Access Denied');
-           
-        }
-        $question->update($request->only('title', 'body'));
-        return redirect('/questions')->
-                        with('success','Your Question Has Been Updated');
+        $this->authorize('update',$question);
+        $question->update($request->only('title','body'));
+        return redirect('/questions')->with('success','Your Question Updated');
     }
 
     /**
@@ -100,12 +93,8 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        if(\Gate::denies('delete-question', $question)){
-            abort(403, 'Access Denied');
-           
-        }
+        $this->authorize('delete',$question);
         $question->delete();
-        return redirect('/questions')->
-                        with('success','Your Question Has Been Deleted');
+        return redirect('/questions')->with('success','Your Question Deleted');
     }
 }

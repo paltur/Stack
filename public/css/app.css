@@ -11659,14 +11659,14 @@ a.text-dark:focus {
 }
 
 .counters strong {
-  font-size: 2em;
   display: block;
+  font-size: 2em;
 }
 
-.counters .vote,
-.counters .answer {
-  width: 60px;
+.counters .votes,
+.counters .answers {
   height: 60px;
+  width: 60px;
 }
 
 .counters .status.unanswered {
@@ -11674,20 +11674,63 @@ a.text-dark:focus {
 }
 
 .counters .status.answered {
-  border: 1px solid #5fbb7e;
+  border: 1px solid green;
   color: #5fbb7e;
 }
 
 .counters .status.answered-accepted {
-  color: #fff;
   background: #5fbb7e;
+  color: white;
 }
 
-.counters .view {
+.counters .views {
   margin-top: 10px;
 }
 
 form.form-delete {
   display: inline;
+}
+
+.votes-control {
+  min-width: 60px;
+  margin-right: 30px;
+  text-align: center;
+  color: #495057;
+}
+
+.votes-control span,
+.votes-control a {
+  display: block;
+}
+
+.votes-control span.votes-count {
+  font-size: 25px;
+}
+
+.votes-control span.favorites-count {
+  font-size: 12px;
+}
+
+.votes-control a {
+  cursor: pointer;
+  color: #495057;
+}
+
+.votes-control a.off,
+.votes-control aoff:hover {
+  color: #adb5bd;
+}
+
+.votes-control a.favorite.favorited,
+.votes-control a.favorite.favorited:hover {
+  color: #ffed4a;
+}
+
+.votes-control a.vote-accept {
+  color: #38c172;
+}
+
+[v-cloak] {
+  display: none;
 }
 

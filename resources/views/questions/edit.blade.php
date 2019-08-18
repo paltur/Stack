@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <h2>Edit Questions</h2>
+                        <h2>Edit Question</h2>
                         <div class="ml-auto">
                             <a href="{{route('questions.index')}}" class="btn btn-outline-secondary">Back To All Question</a>
                         </div>
@@ -16,8 +16,31 @@
 
                 <div class="card-body">
                     <form action="{{route('questions.update',$question->id)}}" method="post">
-                        {{ method_field('PUT')}}
-                        @include('questions._form',['buttonText' => 'Update Question'])
+                        @method('PUT')
+                        @csrf
+                        <div class="form-group">
+                            <label for="question-title">Question Title</label>
+                            <input value="{{old('title',$question->title)}}" type="text" id="question-title" name="title" class="form-control {{$errors->has('title') ? 'is-invalid': ''}}">
+                            @if($errors->has('title'))
+                            <div class="invalid-feedback">
+                                <strong>{{$errors->first('title')}}</strong>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="question-body">Explain Your Question</label>
+                            <textarea name="body" class="form-control {{$errors->has('body') ? 'is-invalid': ''}}" rows="10" id="question-body">{{old('body',$question->body)}}</textarea>
+                             @if($errors->has('body'))
+                            <div class="invalid-feedback">
+                                <strong>{{$errors->first('body')}}</strong>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-primary btn-lg">
+                                Update This Question
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

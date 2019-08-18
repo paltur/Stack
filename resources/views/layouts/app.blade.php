@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -75,5 +76,6 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/all.min.js') }}" defer></script>
 </body>
 </html>
